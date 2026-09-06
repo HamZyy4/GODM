@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goddog Mutasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5, #3b82f6);
+            --success: #10b981;
+            --danger: #f43f5e;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-gray: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        /* Mencegah zoom berlebih di mobile saat tap input */
+        body { background-color: var(--bg-color); color: var(--text-dark); padding-bottom: 80px; -webkit-text-size-adjust: 100%; }
+
+        /* Navbar & Sync Status */
+        .navbar { 
+            background: var(--card-bg); 
+            padding: 15px 20px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+        }
+        .navbar-brand { font-size: 1.25rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
+        
+        .sync-status { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; transition: all 0.3s; }
+        .status-syncing { background: #fef3c7; color: #b45309; }
+        .status-success { background: #ecfdf5; color: #047857; }
+        .status-error { background: #fef2f2; color: #be123c; }
+        
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+
+        /* Mobile Action Bar */
+        .mobile-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .btn-export {
+            flex: 1;
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-export:hover { background: #1f2937; }
+
+        /* Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 24px; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        
+        .card-hero { background: var(--primary-gradient); color: white; position: relative; overflow: hidden; }
+        .card-hero::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+        .card-hero h3 { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 8px; }
+        .card-hero .amount { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        
+        .stat-card { display: flex; align-items: center; gap: 15px; padding: 15px; }
+        .stat-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; flex-shrink: 0; }
+        .stat-icon.income { background: #ecfdf5; color: var(--success); }
+        .stat-icon.expense { background: #fff1f2; color: var(--danger); }
+        .stat-info h3 { font-size: 0.75rem; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
+        .stat-info .amount { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); }
+
+        /* Main Content Grid */
+        .main-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; align-items: start; }
+        
+        /* Form Card */
+        .form-header { font-size: 1.05rem; font-weight: 700; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 14px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; background: #f9fafb; outline: none; transition: 0.2s; -webkit-appearance: none; }
+        .form-control:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .btn-submit { width: 100%; background: var(--primary); color: white; padding: 14px; border-radius: 10px; font-weight: 600; font-size: 1rem; margin-top: 5px; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
+
+        /* Table Card */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { text-align: left; padding: 12px 15px; font-size: 0.75rem; text-transform: uppercase; color: var(--text-gray); border-bottom: 1px solid var(--border); background: #f9fafb; }
+        td { padding: 15px; font-size: 0.85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        
+        .trx-desc { font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 4px; font-size: 0.9rem; }
+        .trx-date { font-size: 0.75rem; color: var(--text-gray); }
+        .text-right { text-align: right; }
+        
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+        .badge-income { background: #ecfdf5; color: #047857; }
+        .badge-expense { background: #fff1f2; color: #be123c; }
+        .badge-initial { background: #e0e7ff; color: #3730a3; }
+        
+        .amt-in { color: var(--success); font-weight: 700; }
+        .amt-out { color: var(--danger); font-weight: 700; }
+        .amt-bal { font-weight: 700; color: var(--text-dark); }
+
+        /* ========================================================
+           RESPONSIVE MOBILE / PORTRAIT MODE STYLING 
+           ======================================================== */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 15px; flex-direction: column; gap: 10px; }
+            .sync-status { width: 100%; justify-content: center; }
+            
+            .dashboard-grid { grid-template-columns: 1fr; gap: 12px; }
+            .main-grid { grid-template-columns: 1fr; gap: 15px; }
+            
+            .stat-card { padding: 12px; }
+            .stat-icon { width: 40px; height: 40px; font-size: 1rem; }
+            .stat-info .amount { font-size: 1.1rem; }
+            
+            /* Mengurangi padding tabel agar lebih muat di layar HP */
+            td { padding: 12px 10px; }
+            th { padding: 10px; }
+            
+            /* Menyesuaikan ukuran input form untuk jari (touch target) */
+            .form-control { font-size: 16px; /* Mencegah auto-zoom iOS */ padding: 12px; }
+            .btn-submit { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fa-solid fa-dog"></i> Goddog Mutasi
+        </div>
+        <!-- Status Indicator -->
+        <div id="syncStatus" class="sync-status status-syncing">
+            <i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke Cloud...
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Mobile Action Bar (Export Button) -->
+        <div class="mobile-actions">
+            <button class="btn-export" onclick="exportCSV()">
+                <i class="fa-solid fa-file-csv"></i> Unduh Data (godmutasi.csv)
+            </button>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            <div class="card card-hero">
+                <h3>Saldo Saat Ini</h3>
+                <div class="amount" id="displayBalance">Rp 0</div>
+            </div>
+            
+            <div class="card stat-card">
+                <div class="stat-icon income"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                <div class="stat-info">
+                    <h3>Pemasukan</h3>
+                    <div class="amount" id="displayIncome">Rp 0</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon expense"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                <div class="stat-info">
+                    <h3>Pengeluaran</h3>
+                    <div class="amount" id="displayExpense">Rp 0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid Layout -->
+        <div class="main-grid">
+            
+            <!-- Form Card -->
+            <div class="card">
+                <div class="form-header">
+                    <i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> Input Transaksi
+                </div>
+                <form id="transactionForm">
+                    <div class="form-group">
+                        <label for="desc">Nama Transaksi</label>
+                        <input type="text" id="desc" class="form-control" placeholder="Cth: Beli Makanan" required autocomplete="off" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Jenis</label>
+                        <select id="type" class="form-control" disabled>
+                            <option value="Keluar">Uang Keluar (-)</option>
+                            <option value="Masuk">Uang Masuk (+)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Nominal (Rp)</label>
+                        <input type="number" id="amount" class="form-control" placeholder="Cth: 20000" min="1" required disabled>
+                    </div>
+                    <button type="submit" id="btnSubmit" class="btn-submit" disabled>Memuat Sistem...</button>
+                </form>
+            </div>
+
+            <!-- Table Card -->
+            <div class="card" style="padding: 0;">
+                <div class="form-header" style="padding: 15px 15px 0 15px; border: none; margin-bottom: 5px;">
+                    <i class="fa-solid fa-clock-rotate-left" style="color: var(--text-gray);"></i> Riwayat Mutasi
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Detail Transaksi</th>
+                                <th>Status</th>
+                                <th class="text-right">Nominal</th>
+                                <th class="text-right">Sisa Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="4" style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--primary);"></i><br><br>Menarik data dari server...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================================================
+        // KONFIGURASI GITHUB - WAJIB DIUBAH!
+        // ===================================================================
+        const GITHUB = {
+            owner: "USERNAME_GITHUB_ANDA", // GANTI INI dengan username github
+            repo: "NAMA_REPO_ANDA",        // GANTI INI dengan nama repository
+            path: "data.json"              
+        };
+
+        // ===================================================================
+        // TOKEN OBFUSCATION (Dipertahankan dari pengaturan sebelumnya)
+        // ===================================================================
+        const _0x1a = "Z2hwX2V4";
+        const _0x1b = "eVFPSnQz";
+        const _0x1c = "MnYxT3F0";
+        const _0x1d = "ZDJrdE5O";
+        const _0x1e = "dDFBYmxP";
+        const _0x1f = "cTVsUjM5";
+        const _0x2a = "cUVRdw==";
+        const __t = () => atob(_0x1a + _0x1b + _0x1c + _0x1d + _0x1e + _0x1f + _0x2a);
+
+        // ===================================================================
+        // APP STATE & API LOGIC
+        // ===================================================================
+        let appData = { currentBalance: 800000, totalIncome: 0, totalExpense: 0, transactions: [] };
+        let fileSha = ""; 
+        const apiUrl = `https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`;
+
+        function setStatus(state, message) {
+            const statusEl = document.getElementById('syncStatus');
+            statusEl.className = 'sync-status';
+            if(state === 'loading') {
+                statusEl.classList.add('status-syncing');
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${message}`;
+                toggleForm(false);
+            } else if(state === 'success') {
+                statusEl.classList.add('status-success');
+                statusEl.innerHTML = `<i class="fa-solid fa-cloud-check"></i> ${message}`;
+                toggleForm(true);
+            } else if(state === 'error') {
+                statusEl.classList.add('status-error');
+                statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`;
+            }
+        }
+
+        function toggleForm(isActive) {
+            document.getElementById('desc').disabled = !isActive;
+            document.getElementById('type').disabled = !isActive;
+            document.getElementById('amount').disabled = !isActive;
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = !isActive;
+            btn.innerText = isActive ? "Simpan Transaksi" : "Proses...";
+        }
+
+        async function fetchFromGitHub() {
+            setStatus('loading', 'Sinkronisasi...');
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `token ${__t()}`,
+                        "Accept": "application/vnd.github.v3+json"
+                    }
+                });
+
+                if (response.status === 404) {
+                    appData.transactions.push({ date: getCurrentDate(), desc: "Budget Saldo Awal", type: "Awal", amount: 800000, balanceAfter: 800000 });
+                    await saveToGitHub("Inisialisasi Goddog Mutasi");
+                    return;
+                }
+
+                if (!response.ok) throw new Error("Gagal mengambil data");
+
+                const data = await response.json();
+                fileSha = data.sha; 
+                
+                const decodedContent = decodeURIComponent(escape(atob(data.content)));
+                appData = JSON.parse(decodedContent);
+                
+                updateUI();
+                setStatus('success', 'Online');
+                
+            } catch (error) {
+                console.error(error);
+                setStatus('error', 'Offline / Error');
+            }
+        }
+
+        async function saveToGitHub(commitMessage = "Goddog Mutasi Update") {
+            setStatus('loading', 'Menyimpan...');
+            try {
+                const jsonString = JSON.stringify(appData, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+                const requestBody = { message: commitMessage, content: base64Content, sha: fileSha };
+
+                const response = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `token ${__t()}`,
+                        "Accept": "application/vnd.github.v3+json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) throw new Error("Gagal menyimpan");
+
+                const data = await response.json();
+                fileSha = data.content.sha; 
+
+                setStatus('success', 'Tersimpan');
+                updateUI();
+
+            } catch (error) {
+                console.error(error);
+                setStatus('error', 'Gagal Simpan');
+                alert("Gagal menyimpan data ke Server!");
+            }
+        }
+
+        // ===================================================================
+        // EKSPOR KE CSV (godmutasi.csv)
+        // ===================================================================
+        function exportCSV() {
+            if (appData.transactions.length === 0) {
+                alert("Belum ada data transaksi.");
+                return;
+            }
+
+            let csv = "Waktu Transaksi,Keterangan,Jenis,Nominal,Saldo Akhir\n";
+            const reversedData = [...appData.transactions].reverse();
+            reversedData.forEach(trx => {
+                let safeDesc = trx.desc.replace(/,/g, ' '); 
+                csv += `${trx.date},${safeDesc},${trx.type},${trx.amount},${trx.balanceAfter}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            // PENGATURAN NAMA FILE SPESIFIK: godmutasi.csv
+            link.download = `godmutasi.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ===================================================================
+        // UI RENDER & UTILS
+        // ===================================================================
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        }
+
+        function updateUI() {
+            document.getElementById('displayBalance').innerText = formatRupiah(appData.currentBalance);
+            document.getElementById('displayIncome').innerText = formatRupiah(appData.totalIncome);
+            document.getElementById('displayExpense').innerText = formatRupiah(appData.totalExpense);
+
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = ''; 
+
+            if(appData.transactions.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color:#6b7280;">Data kosong</td></tr>';
+                return;
+            }
+
+            appData.transactions.forEach(trx => {
+                const tr = document.createElement('tr');
+                let typeBadge, amountFormat;
+
+                if (trx.type === 'Masuk') {
+                    typeBadge = '<span class="badge badge-income"><i class="fa-solid fa-arrow-down"></i> IN</span>';
+                    amountFormat = `<span class="amt-in">+${formatRupiah(trx.amount)}</span>`;
+                } else if (trx.type === 'Keluar') {
+                    typeBadge = '<span class="badge badge-expense"><i class="fa-solid fa-arrow-up"></i> OUT</span>';
+                    amountFormat = `<span class="amt-out">-${formatRupiah(trx.amount)}</span>`;
+                } else {
+                    typeBadge = '<span class="badge badge-initial"><i class="fa-solid fa-star"></i> AWAL</span>';
+                    amountFormat = `<span style="font-weight:700;">${formatRupiah(trx.amount)}</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td>
+                        <span class="trx-desc">${trx.desc}</span>
+                        <span class="trx-date">${trx.date}</span>
+                    </td>
+                    <td>${typeBadge}</td>
+                    <td class="text-right">${amountFormat}</td>
+                    <td class="text-right amt-bal">${formatRupiah(trx.balanceAfter)}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('transactionForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+            const desc = document.getElementById('desc').value;
+            const type = document.getElementById('type').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (type === 'Keluar' && amount > appData.currentBalance) {
+                alert(`Saldo kurang! Sisa: ${formatRupiah(appData.currentBalance)}`);
+                return; 
+            }
+
+            if (type === 'Masuk') {
+                appData.currentBalance += amount;
+                appData.totalIncome += amount;
+            } else if (type === 'Keluar') {
+                appData.currentBalance -= amount;
+                appData.totalExpense += amount;
+            }
+
+            appData.transactions.unshift({
+                date: getCurrentDate(),
+                desc: desc,
+                type: type,
+                amount: amount,
+                balanceAfter: appData.currentBalance
+            });
+
+            await saveToGitHub(`Goddog: ${type} ${amount} - ${desc}`);
+            this.reset();
+        });
+
+        window.onload = fetchFromGitHub;
+    </script>
+</body>
+</html>
