@@ -1,0 +1,14 @@
+{
+  "currentBalance": 800000,
+  "totalIncome": 0,
+  "totalExpense": 0,
+  "transactions": [
+    {
+      "date": "06 Sep 2026, 09:00",
+      "desc": "Budget Saldo Awal",
+      "type": "Awal",
+      "amount": 800000,
+      "balanceAfter": 800000
+    }
+  ]
+}
