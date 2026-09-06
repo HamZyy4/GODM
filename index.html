@@ -4,141 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Goddog Mutasi</title>
+    
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Pustaka untuk Export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         :root {
             --primary: #4f46e5;
-            --primary-gradient: linear-gradient(135deg, #4f46e5, #3b82f6);
+            --primary-light: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
             --success: #10b981;
             --danger: #f43f5e;
-            --bg-color: #f3f4f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-dark: #111827;
-            --text-gray: #6b7280;
-            --border: #e5e7eb;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
-        /* Mencegah zoom berlebih di mobile saat tap input */
         body { background-color: var(--bg-color); color: var(--text-dark); padding-bottom: 80px; -webkit-text-size-adjust: 100%; }
 
-        /* Navbar & Sync Status */
+        /* Navbar Modern */
         .navbar { 
-            background: var(--card-bg); 
-            padding: 15px 20px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(10px);
+            padding: 16px 24px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             position: sticky; 
             top: 0; 
             z-index: 100; 
+            border-bottom: 1px solid var(--border);
         }
-        .navbar-brand { font-size: 1.25rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
+        .navbar-brand { font-size: 1.25rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
         
-        .sync-status { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; transition: all 0.3s; }
+        .sync-status { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; transition: all 0.3s; }
         .status-syncing { background: #fef3c7; color: #b45309; }
         .status-success { background: #ecfdf5; color: #047857; }
         .status-error { background: #fef2f2; color: #be123c; }
         
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
 
-        /* Mobile Action Bar */
-        .mobile-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        .btn-export {
-            flex: 1;
-            background: #111827;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-export:hover { background: #1f2937; }
-
-        /* Dashboard Grid */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 24px; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        /* Card Saldo Premium */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.5); }
         
-        .card-hero { background: var(--primary-gradient); color: white; position: relative; overflow: hidden; }
-        .card-hero::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; }
-        .card-hero h3 { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 8px; }
-        .card-hero .amount { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        .card-hero { background: var(--primary-gradient); color: white; position: relative; overflow: hidden; box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.4); border: none; }
+        .card-hero::before { content: ''; position: absolute; right: -30px; top: -30px; width: 160px; height: 160px; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0)); border-radius: 50%; }
+        .card-hero::after { content: ''; position: absolute; left: -20px; bottom: -20px; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0)); border-radius: 50%; }
         
-        .stat-card { display: flex; align-items: center; gap: 15px; padding: 15px; }
-        .stat-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; flex-shrink: 0; }
+        .card-hero h3 { font-size: 0.9rem; font-weight: 500; opacity: 0.9; margin-bottom: 8px; position: relative; z-index: 2; }
+        .card-hero .amount { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; position: relative; z-index: 2; }
+        
+        .stat-card { display: flex; align-items: center; gap: 16px; padding: 16px 20px; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; flex-shrink: 0; }
         .stat-icon.income { background: #ecfdf5; color: var(--success); }
         .stat-icon.expense { background: #fff1f2; color: var(--danger); }
-        .stat-info h3 { font-size: 0.75rem; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
-        .stat-info .amount { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); }
+        .stat-info h3 { font-size: 0.75rem; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-info .amount { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
+
+        /* Action Buttons Grid */
+        .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .btn-export { background: var(--card-bg); color: var(--text-dark); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .btn-export:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .btn-export.pdf { color: #e11d48; } /* Warna merah untuk icon PDF */
+        .btn-export.csv { color: #059669; } /* Warna hijau untuk icon CSV */
 
         /* Main Content Grid */
-        .main-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; align-items: start; }
+        .main-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: start; }
         
         /* Form Card */
-        .form-header { font-size: 1.05rem; font-weight: 700; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 14px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; background: #f9fafb; outline: none; transition: 0.2s; -webkit-appearance: none; }
-        .form-control:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        .btn-submit { width: 100%; background: var(--primary); color: white; padding: 14px; border-radius: 10px; font-weight: 600; font-size: 1rem; margin-top: 5px; border: none; cursor: pointer; transition: 0.2s; }
-        .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
+        .form-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; color: var(--text-dark); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; }
+        .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; background: #f8fafc; outline: none; transition: 0.2s; -webkit-appearance: none; }
+        .form-control:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .btn-submit { width: 100%; background: var(--primary); color: white; padding: 16px; border-radius: 12px; font-weight: 600; font-size: 1rem; margin-top: 8px; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; }
 
         /* Table Card */
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { text-align: left; padding: 12px 15px; font-size: 0.75rem; text-transform: uppercase; color: var(--text-gray); border-bottom: 1px solid var(--border); background: #f9fafb; }
-        td { padding: 15px; font-size: 0.85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 500px; }
+        th { text-align: left; padding: 16px; font-size: 0.75rem; text-transform: uppercase; color: var(--text-gray); background: #f8fafc; border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); font-weight: 700; }
+        td { padding: 16px; font-size: 0.9rem; border-bottom: 1px solid var(--border); vertical-align: middle; background: var(--card-bg); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8fafc; }
         
-        .trx-desc { font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 4px; font-size: 0.9rem; }
-        .trx-date { font-size: 0.75rem; color: var(--text-gray); }
+        .trx-desc { font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 4px; font-size: 0.95rem; }
+        .trx-date { font-size: 0.75rem; color: var(--text-gray); display: flex; align-items: center; gap: 4px; }
         .text-right { text-align: right; }
         
-        .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-        .badge-income { background: #ecfdf5; color: #047857; }
-        .badge-expense { background: #fff1f2; color: #be123c; }
-        .badge-initial { background: #e0e7ff; color: #3730a3; }
+        .badge { padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+        .badge-income { background: #ecfdf5; color: #059669; }
+        .badge-expense { background: #fff1f2; color: #e11d48; }
+        .badge-initial { background: #e0e7ff; color: #4f46e5; }
         
-        .amt-in { color: var(--success); font-weight: 700; }
-        .amt-out { color: var(--danger); font-weight: 700; }
+        .amt-in { color: #059669; font-weight: 700; }
+        .amt-out { color: #e11d48; font-weight: 700; }
         .amt-bal { font-weight: 700; color: var(--text-dark); }
 
         /* ========================================================
-           RESPONSIVE MOBILE / PORTRAIT MODE STYLING 
+           RESPONSIVE MOBILE / PORTRAIT MODE 
            ======================================================== */
         @media (max-width: 768px) {
-            .navbar { padding: 12px 15px; flex-direction: column; gap: 10px; }
-            .sync-status { width: 100%; justify-content: center; }
+            .navbar { padding: 14px 16px; }
+            .navbar-brand { font-size: 1.15rem; }
+            .container { padding: 0 16px; margin: 16px auto; }
             
-            .dashboard-grid { grid-template-columns: 1fr; gap: 12px; }
-            .main-grid { grid-template-columns: 1fr; gap: 15px; }
+            /* Pada Mobile: Saldo Utama Full width, Pemasukan/Pengeluaran membagi 2 kolom */
+            .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+            .card-hero { grid-column: span 2; padding: 24px 20px; }
+            .card-hero .amount { font-size: 2rem; }
             
-            .stat-card { padding: 12px; }
-            .stat-icon { width: 40px; height: 40px; font-size: 1rem; }
-            .stat-info .amount { font-size: 1.1rem; }
+            .stat-card { padding: 14px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .stat-icon { width: 38px; height: 38px; font-size: 1rem; border-radius: 10px; }
             
-            /* Mengurangi padding tabel agar lebih muat di layar HP */
-            td { padding: 12px 10px; }
-            th { padding: 10px; }
+            .main-grid { grid-template-columns: 1fr; gap: 20px; }
+            .card { padding: 20px; }
             
-            /* Menyesuaikan ukuran input form untuk jari (touch target) */
-            .form-control { font-size: 16px; /* Mencegah auto-zoom iOS */ padding: 12px; }
-            .btn-submit { padding: 12px; }
+            /* Mencegah auto-zoom di iOS */
+            .form-control { font-size: 16px; padding: 12px 14px; } 
+            
+            /* Optimasi Tabel untuk Mobile */
+            th { padding: 12px; }
+            td { padding: 14px 12px; }
+            .trx-desc { font-size: 0.9rem; }
+            .badge { padding: 4px 8px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -147,32 +148,24 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-brand">
-            <i class="fa-solid fa-dog"></i> Goddog Mutasi
+            <i class="fa-solid fa-paw"></i> Goddog Mutasi
         </div>
-        <!-- Status Indicator -->
         <div id="syncStatus" class="sync-status status-syncing">
-            <i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke Cloud...
+            <i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan...
         </div>
     </nav>
 
     <div class="container">
         
-        <!-- Mobile Action Bar (Export Button) -->
-        <div class="mobile-actions">
-            <button class="btn-export" onclick="exportCSV()">
-                <i class="fa-solid fa-file-csv"></i> Unduh Data (godmutasi.csv)
-            </button>
-        </div>
-
         <!-- Dashboard Cards -->
         <div class="dashboard-grid">
             <div class="card card-hero">
-                <h3>Saldo Saat Ini</h3>
+                <h3>Saldo Aktif Saat Ini</h3>
                 <div class="amount" id="displayBalance">Rp 0</div>
             </div>
             
             <div class="card stat-card">
-                <div class="stat-icon income"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                <div class="stat-icon income"><i class="fa-solid fa-arrow-down"></i></div>
                 <div class="stat-info">
                     <h3>Pemasukan</h3>
                     <div class="amount" id="displayIncome">Rp 0</div>
@@ -180,7 +173,7 @@
             </div>
 
             <div class="card stat-card">
-                <div class="stat-icon expense"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                <div class="stat-icon expense"><i class="fa-solid fa-arrow-up"></i></div>
                 <div class="stat-info">
                     <h3>Pengeluaran</h3>
                     <div class="amount" id="displayExpense">Rp 0</div>
@@ -188,21 +181,31 @@
             </div>
         </div>
 
+        <!-- Tombol Export Data -->
+        <div class="actions-grid">
+            <button class="btn-export" onclick="exportCSV()">
+                <i class="fa-solid fa-file-csv csv"></i> Unduh CSV
+            </button>
+            <button class="btn-export" onclick="exportPDF()">
+                <i class="fa-solid fa-file-pdf pdf"></i> Cetak PDF
+            </button>
+        </div>
+
         <!-- Main Grid Layout -->
         <div class="main-grid">
             
-            <!-- Form Card -->
+            <!-- Form Input -->
             <div class="card">
                 <div class="form-header">
-                    <i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> Input Transaksi
+                    <i class="fa-solid fa-wallet" style="color: var(--primary);"></i> Catat Transaksi
                 </div>
                 <form id="transactionForm">
                     <div class="form-group">
                         <label for="desc">Nama Transaksi</label>
-                        <input type="text" id="desc" class="form-control" placeholder="Cth: Beli Makanan" required autocomplete="off" disabled>
+                        <input type="text" id="desc" class="form-control" placeholder="Cth: Top Up Game" required autocomplete="off" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="type">Jenis</label>
+                        <label for="type">Jenis Transaksi</label>
                         <select id="type" class="form-control" disabled>
                             <option value="Keluar">Uang Keluar (-)</option>
                             <option value="Masuk">Uang Masuk (+)</option>
@@ -210,15 +213,15 @@
                     </div>
                     <div class="form-group">
                         <label for="amount">Nominal (Rp)</label>
-                        <input type="number" id="amount" class="form-control" placeholder="Cth: 20000" min="1" required disabled>
+                        <input type="number" id="amount" class="form-control" placeholder="Cth: 50000" min="1" required disabled>
                     </div>
                     <button type="submit" id="btnSubmit" class="btn-submit" disabled>Memuat Sistem...</button>
                 </form>
             </div>
 
-            <!-- Table Card -->
-            <div class="card" style="padding: 0;">
-                <div class="form-header" style="padding: 15px 15px 0 15px; border: none; margin-bottom: 5px;">
+            <!-- Table History -->
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <div class="form-header" style="padding: 20px 20px 0 20px; margin-bottom: 10px;">
                     <i class="fa-solid fa-clock-rotate-left" style="color: var(--text-gray);"></i> Riwayat Mutasi
                 </div>
                 <div class="table-responsive">
@@ -232,7 +235,7 @@
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            <tr><td colspan="4" style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--primary);"></i><br><br>Menarik data dari server...</td></tr>
+                            <tr><td colspan="4" style="text-align:center; padding: 50px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 28px; color: var(--primary);"></i><br><br><span style="color: var(--text-gray); font-size: 0.9rem;">Menarik data mutasi...</span></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -242,17 +245,14 @@
 
     <script>
         // ===================================================================
-        // KONFIGURASI GITHUB - WAJIB DIUBAH!
+        // KONFIGURASI GITHUB
         // ===================================================================
         const GITHUB = {
-            owner: "HamZyy4", // GANTI INI dengan username github
-            repo: "GODM",        // GANTI INI dengan nama repository
+            owner: "HamZyy4", 
+            repo: "GODM",        
             path: "data.json"              
         };
 
-        // ===================================================================
-        // TOKEN OBFUSCATION (Dipertahankan dari pengaturan sebelumnya)
-        // ===================================================================
         const _0x1a = "Z2hwX2V4";
         const _0x1b = "eVFPSnQz";
         const _0x1c = "MnYxT3F0";
@@ -300,10 +300,7 @@
             try {
                 const response = await fetch(apiUrl, {
                     method: "GET",
-                    headers: {
-                        "Authorization": `token ${__t()}`,
-                        "Accept": "application/vnd.github.v3+json"
-                    }
+                    headers: { "Authorization": `token ${__t()}`, "Accept": "application/vnd.github.v3+json" }
                 });
 
                 if (response.status === 404) {
@@ -311,7 +308,6 @@
                     await saveToGitHub("Inisialisasi Goddog Mutasi");
                     return;
                 }
-
                 if (!response.ok) throw new Error("Gagal mengambil data");
 
                 const data = await response.json();
@@ -322,7 +318,6 @@
                 
                 updateUI();
                 setStatus('success', 'Online');
-                
             } catch (error) {
                 console.error(error);
                 setStatus('error', 'Offline / Error');
@@ -335,26 +330,18 @@
                 const jsonString = JSON.stringify(appData, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
-                const requestBody = { message: commitMessage, content: base64Content, sha: fileSha };
-
                 const response = await fetch(apiUrl, {
                     method: "PUT",
-                    headers: {
-                        "Authorization": `token ${__t()}`,
-                        "Accept": "application/vnd.github.v3+json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(requestBody)
+                    headers: { "Authorization": `token ${__t()}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: commitMessage, content: base64Content, sha: fileSha })
                 });
 
                 if (!response.ok) throw new Error("Gagal menyimpan");
-
                 const data = await response.json();
                 fileSha = data.content.sha; 
 
                 setStatus('success', 'Tersimpan');
                 updateUI();
-
             } catch (error) {
                 console.error(error);
                 setStatus('error', 'Gagal Simpan');
@@ -363,25 +350,91 @@
         }
 
         // ===================================================================
-        // EKSPOR KE CSV (godmutasi.csv)
+        // FUNGSI EXPORT PDF & CSV
         // ===================================================================
-        function exportCSV() {
+        
+        // Export PDF Menggunakan jsPDF + AutoTable
+        function exportPDF() {
             if (appData.transactions.length === 0) {
-                alert("Belum ada data transaksi.");
+                alert("Belum ada data untuk diekspor ke PDF.");
                 return;
             }
 
+            // Inisialisasi jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Desain Header Laporan
+            doc.setFontSize(20);
+            doc.setTextColor(79, 70, 229); // Primary color
+            doc.text("Laporan Mutasi Goddog", 14, 22);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 116, 139); // Text gray
+            doc.text(`Waktu Cetak: ${getCurrentDate()}`, 14, 30);
+
+            // Kotak Ringkasan Saldo (Summary Box)
+            doc.setFillColor(248, 250, 252);
+            doc.rect(14, 35, 182, 35, 'F');
+            
+            doc.setFontSize(11);
+            doc.setTextColor(15, 23, 42); // Text dark
+            doc.text(`Saldo Akhir: ${formatRupiah(appData.currentBalance)}`, 20, 45);
+            
+            doc.setTextColor(5, 150, 105); // Success color
+            doc.text(`Total Pemasukan: +${formatRupiah(appData.totalIncome)}`, 20, 53);
+            
+            doc.setTextColor(225, 29, 72); // Danger color
+            doc.text(`Total Pengeluaran: -${formatRupiah(appData.totalExpense)}`, 20, 61);
+
+            // Menyiapkan Data Tabel
+            const tableColumn = ["Waktu Transaksi", "Detail", "Tipe", "Nominal", "Saldo Sisa"];
+            const tableRows = [];
+
+            // Memasukkan data ke baris (dibaca dari terlama ke terbaru)
+            const exportData = [...appData.transactions].reverse();
+            exportData.forEach(trx => {
+                let typeText = trx.type === 'Masuk' ? 'IN' : (trx.type === 'Keluar' ? 'OUT' : 'AWAL');
+                const row = [
+                    trx.date,
+                    trx.desc,
+                    typeText,
+                    formatRupiah(trx.amount),
+                    formatRupiah(trx.balanceAfter)
+                ];
+                tableRows.push(row);
+            });
+
+            // Membuat Tabel
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 75,
+                theme: 'striped',
+                headStyles: { fillColor: [79, 70, 229], textColor: [255, 255, 255], fontStyle: 'bold' },
+                styles: { fontSize: 9, cellPadding: 4 },
+                alternateRowStyles: { fillColor: [248, 250, 252] }
+            });
+
+            // Eksekusi Download
+            doc.save("Goddog_Mutasi_Laporan.pdf");
+        }
+
+        // Export CSV Lama (Dipertahankan)
+        function exportCSV() {
+            if (appData.transactions.length === 0) {
+                alert("Belum ada data.");
+                return;
+            }
             let csv = "Waktu Transaksi,Keterangan,Jenis,Nominal,Saldo Akhir\n";
             const reversedData = [...appData.transactions].reverse();
             reversedData.forEach(trx => {
                 let safeDesc = trx.desc.replace(/,/g, ' '); 
                 csv += `${trx.date},${safeDesc},${trx.type},${trx.amount},${trx.balanceAfter}\n`;
             });
-
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            // PENGATURAN NAMA FILE SPESIFIK: godmutasi.csv
             link.download = `godmutasi.csv`;
             document.body.appendChild(link);
             link.click();
@@ -409,7 +462,7 @@
             tableBody.innerHTML = ''; 
 
             if(appData.transactions.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color:#6b7280;">Data kosong</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 30px; color:#64748b;">Belum ada riwayat transaksi</td></tr>';
                 return;
             }
 
@@ -431,7 +484,7 @@
                 tr.innerHTML = `
                     <td>
                         <span class="trx-desc">${trx.desc}</span>
-                        <span class="trx-date">${trx.date}</span>
+                        <span class="trx-date"><i class="fa-regular fa-clock"></i> ${trx.date}</span>
                     </td>
                     <td>${typeBadge}</td>
                     <td class="text-right">${amountFormat}</td>
@@ -448,7 +501,7 @@
             const amount = parseFloat(document.getElementById('amount').value);
 
             if (type === 'Keluar' && amount > appData.currentBalance) {
-                alert(`Saldo kurang! Sisa: ${formatRupiah(appData.currentBalance)}`);
+                alert(`Saldo tidak mencukupi! Sisa saldo: ${formatRupiah(appData.currentBalance)}`);
                 return; 
             }
 
@@ -468,7 +521,7 @@
                 balanceAfter: appData.currentBalance
             });
 
-            await saveToGitHub(`Goddog: ${type} ${amount} - ${desc}`);
+            await saveToGitHub(`Goddog Transaksi: ${type} ${amount} - ${desc}`);
             this.reset();
         });
 
