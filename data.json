@@ -1,8 +1,15 @@
 {
-  "currentBalance": 800000,
+  "currentBalance": 795000,
   "totalIncome": 0,
-  "totalExpense": 0,
+  "totalExpense": 5000,
   "transactions": [
+    {
+      "date": "06 Sep 2026, 22.17",
+      "desc": "Sewa Robot",
+      "type": "Keluar",
+      "amount": 5000,
+      "balanceAfter": 795000
+    },
     {
       "date": "06 Sep 2026, 09:00",
       "desc": "Budget",
