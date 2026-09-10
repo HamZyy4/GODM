@@ -4,13 +4,6 @@
   "totalExpense": 200,
   "transactions": [
     {
-      "date": "10 Sep 2026, 16.59",
-      "desc": "Live Opmem Wil",
-      "type": "Keluar",
-      "amount": 200,
-      "balanceAfter": 799800
-    },
-    {
       "date": "06 Sep 2026, 09:00",
       "desc": "Budget",
       "type": "Awal",
