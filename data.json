@@ -1,8 +1,15 @@
 {
-  "currentBalance": 800000,
+  "currentBalance": 799800,
   "totalIncome": 0,
-  "totalExpense": 0,
+  "totalExpense": 200,
   "transactions": [
+    {
+      "date": "10 Sep 2026, 16.59",
+      "desc": "Live Opmem Wil",
+      "type": "Keluar",
+      "amount": 200,
+      "balanceAfter": 799800
+    },
     {
       "date": "06 Sep 2026, 09:00",
       "desc": "Budget",
