@@ -1,8 +1,15 @@
 {
-  "currentBalance": 597500,
+  "currentBalance": 397500,
   "totalIncome": 0,
-  "totalExpense": 202500,
+  "totalExpense": 402500,
   "transactions": [
+    {
+      "date": "17 Sep 2026, 22.21",
+      "desc": "kardong mangen",
+      "type": "Keluar",
+      "amount": 200000,
+      "balanceAfter": 397500
+    },
     {
       "date": "10 Sep 2026, 17.08",
       "desc": "Live Opmem Wil",
