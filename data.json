@@ -1,7 +1,14 @@
 {
-  "currentBalance": 0,
-  "totalIncome": 0,
+  "currentBalance": 500000,
+  "totalIncome": 500000,
   "totalExpense": 0,
   "transactions": [
+    {
+      "date": "28 Sep 2026, 21.27",
+      "desc": "Dana DARI DANAR",
+      "type": "Masuk",
+      "amount": 500000,
+      "balanceAfter": 500000
+    }
   ]
 }
