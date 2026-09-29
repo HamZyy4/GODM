@@ -1,8 +1,15 @@
 {
-  "currentBalance": 1950000,
+  "currentBalance": 1825000,
   "totalIncome": 1950000,
-  "totalExpense": 0,
+  "totalExpense": 125000,
   "transactions": [
+    {
+      "date": "29 Sep 2026, 21.45",
+      "desc": "kardong",
+      "type": "Keluar",
+      "amount": 125000,
+      "balanceAfter": 1825000
+    },
     {
       "date": "28 Sep 2026, 21.27",
       "desc": "dana DARI KARDONG",
