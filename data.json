@@ -1,8 +1,15 @@
 {
-  "currentBalance": 1825000,
+  "currentBalance": 1780000,
   "totalIncome": 1950000,
-  "totalExpense": 125000,
+  "totalExpense": 170000,
   "transactions": [
+    {
+      "date": "30 Sep 2026, 14.23",
+      "desc": "kito reward",
+      "type": "Keluar",
+      "amount": 45000,
+      "balanceAfter": 1780000
+    },
     {
       "date": "29 Sep 2026, 21.45",
       "desc": "kardong",
