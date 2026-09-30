@@ -1,8 +1,15 @@
 {
-  "currentBalance": 1780000,
+  "currentBalance": 1705000,
   "totalIncome": 1950000,
-  "totalExpense": 170000,
+  "totalExpense": 245000,
   "transactions": [
+    {
+      "date": "30 Sep 2026, 23.20",
+      "desc": "reward piki",
+      "type": "Keluar",
+      "amount": 75000,
+      "balanceAfter": 1705000
+    },
     {
       "date": "30 Sep 2026, 14.23",
       "desc": "kito reward",
