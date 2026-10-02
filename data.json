@@ -1,8 +1,15 @@
 {
-  "currentBalance": 1705000,
-  "totalIncome": 1950000,
+  "currentBalance": 2005000,
+  "totalIncome": 2250000,
   "totalExpense": 245000,
   "transactions": [
+    {
+      "date": "03 Okt 2026, 04.28",
+      "desc": "kris",
+      "type": "Masuk",
+      "amount": 300000,
+      "balanceAfter": 2005000
+    },
     {
       "date": "30 Sep 2026, 23.20",
       "desc": "reward piki",
