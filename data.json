@@ -1,8 +1,15 @@
 {
-  "currentBalance": 2005000,
+  "currentBalance": 5000,
   "totalIncome": 2250000,
-  "totalExpense": 245000,
+  "totalExpense": 2245000,
   "transactions": [
+    {
+      "date": "04 Okt 2026, 14.59",
+      "desc": "robot 2",
+      "type": "Keluar",
+      "amount": 2000000,
+      "balanceAfter": 5000
+    },
     {
       "date": "03 Okt 2026, 04.28",
       "desc": "kris",
