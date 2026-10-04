@@ -1,8 +1,15 @@
 {
-  "currentBalance": 5000,
-  "totalIncome": 2250000,
+  "currentBalance": 1205000,
+  "totalIncome": 3450000,
   "totalExpense": 2245000,
   "transactions": [
+    {
+      "date": "04 Okt 2026, 14.59",
+      "desc": "chris",
+      "type": "Masuk",
+      "amount": 1200000,
+      "balanceAfter": 1205000
+    },
     {
       "date": "04 Okt 2026, 14.59",
       "desc": "robot 2",
